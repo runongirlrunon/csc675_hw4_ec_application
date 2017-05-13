@@ -23,21 +23,22 @@ class Chinook
     state = gets
     puts "Marketing material:"
     results = @database.execute(
-                "select A.AlbumId, A.Title \
-                from Album A \
-                where A.AlbumId in ( \
-                  select T.AlbumId \
-                  from Track T \
-                  where T.TrackId in ( \
-                    select L.TrackId \
-                    from InvoiceLine L \
-                    where L.InvoiceId \
-                    not in ( \
-                      select I.InvoiceId \
-                      from Invoice I \
-                      where I.BillingState = ?
-                    )))
-                group by A.AlbumId;",
+                "with AllAlbums AS \
+                  ( select A.AlbumId, A.Title \
+                    from album A \
+                    order by A.AlbumId ), \
+                StateAlbums as \
+                  ( select A.AlbumId, A.Title \
+                    from Track T, Invoice I, InvoiceLine L, Album A \
+                    where L.TrackId = T.TrackId \
+                    and A.AlbumId = T.AlbumId \
+                    and L.InvoiceId = I.InvoiceId \
+                    and I.BillingState = ? \
+                    group by A.Title \
+                    order by A.AlbumId) \
+                select * from AllAlbums \
+                except \
+                select * from StateAlbums;",
                 state)
     unless results.empty?
       puts results
