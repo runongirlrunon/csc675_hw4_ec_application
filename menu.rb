@@ -6,11 +6,10 @@ class Menu
   def display_menu_options
     puts '=============================================='
     puts 'Please make a selection:'
-    puts '[1] Obtain Album title(s) based on Artist name'
-    puts '[2] Obtain Track(s) of an Album title'
-    puts '[3] Purchase History for a Customer'
-    puts '[4] Update Track Price - Individual'
-    puts '[5] Update Track Price - Batch'
+    puts '[1] Identify marketable population and material'
+    puts '[2] Recommend tracks'
+    puts '[3] List top sellers - by revenue'
+    puts '[4] List top sellers - by volume'
     puts '[0] Exit program'
     puts '=============================================='
     puts
@@ -26,7 +25,7 @@ class Menu
 
   def process_selection
     case @selection.to_i
-    when 1..5
+    when 1..4
       selection
     when 0
       puts 'Goodbye!'
