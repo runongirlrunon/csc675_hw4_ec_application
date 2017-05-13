@@ -63,7 +63,12 @@ class Chinook
     puts "Enter customer ID number:"
     customer_id = gets
     results = @database.execute(
-                "",
+                "select T.AlbumId, group_concat(T.TrackId) as 'AlbumTracks' \
+                from Track T, InvoiceLine L, Invoice I \
+                where L.InvoiceId = I.InvoiceId and I.CustomerId = ? \
+                and T.TrackId = L.TrackId \
+                group by T.AlbumId \
+                having count(T.AlbumId)>=3",
                 customer_id)
     unless results.empty?
       puts results
