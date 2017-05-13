@@ -20,7 +20,7 @@ class Chinook
 
   def identify_marketing
     puts "Enter state (postal abbreviation):"
-    state = gets
+    state = gets.strip
     puts "Marketing material:"
     results = @database.execute(
                 "with AllAlbums AS \
@@ -47,11 +47,7 @@ class Chinook
     end
 
     puts "Marketable customers:"
-    results = @database.execute(
-                "select * \
-                from Customer C \
-                where C.State = ?",
-                state)
+    results = @database.execute("select * from Customer C where C.State = ?", state)
     unless results.empty?
       puts results
     else
