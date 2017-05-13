@@ -68,7 +68,7 @@ class Chinook
                 where L.InvoiceId = I.InvoiceId and I.CustomerId = ? \
                 and T.TrackId = L.TrackId \
                 group by T.AlbumId \
-                having count(T.AlbumId)>=3",
+                having count(T.AlbumId)>=3;",
                 customer_id)
     unless results.empty?
       puts results
@@ -79,7 +79,13 @@ class Chinook
 
   def list_top_sellers_by_revenue
     results = @database.execute(
-                "")
+                "select R.Name, sum(L.Quantity), sum(L.UnitPrice * L.Quantity) as TotalRevenue \
+                from Album A, Artist R, Track T, InvoiceLine L \
+                where L.TrackId = T.TrackId \
+                and R.ArtistId = A.ArtistId \
+                and T.AlbumId = A.AlbumId \
+                group by R.ArtistId \
+                order by TotalRevenue desc;")
     unless results.empty?
       puts results
     else
@@ -89,7 +95,13 @@ class Chinook
 
   def list_top_sellers_by_volume
     results = @database.execute(
-                "")
+                "select R.Name, sum(L.Quantity) as TotalVolume \
+                from Album A, Artist R, Track T, InvoiceLine L \
+                where L.TrackId = T.TrackId \
+                and R.ArtistId = A.ArtistId \
+                and T.AlbumId = A.AlbumId \
+                group by R.ArtistId \
+                order by TotalVolume desc;")
     unless results.empty?
       puts results
     else
