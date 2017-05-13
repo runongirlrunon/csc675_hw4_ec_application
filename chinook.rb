@@ -85,7 +85,8 @@ class Chinook
                 and R.ArtistId = A.ArtistId \
                 and T.AlbumId = A.AlbumId \
                 group by R.ArtistId \
-                order by TotalRevenue desc;")
+                order by TotalRevenue desc \
+                limit 10;")
     unless results.empty?
       puts results
     else
@@ -101,7 +102,8 @@ class Chinook
                 and R.ArtistId = A.ArtistId \
                 and T.AlbumId = A.AlbumId \
                 group by R.ArtistId \
-                order by TotalVolume desc;")
+                order by TotalVolume desc \
+                limit 10;")
     unless results.empty?
       puts results
     else
